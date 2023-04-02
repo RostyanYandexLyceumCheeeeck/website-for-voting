@@ -1,0 +1,6 @@
+pip install flask-restful
+pip install sqlalchemy
+pip install flask-login
+pip install python-dotenv
+pip install flask-wtf
+pip install SQLAlchemy-serializer
