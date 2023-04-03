@@ -12,12 +12,17 @@ from data import db_session
 from data.__all_models import User
 from forms.registerForm import RegisterForm
 from forms.loginForm import LoginForm
-
+from routes import users_api
+from resources import user_resource
 
 load_dotenv()
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
+api = Api(app)
+api.add_resource(user_resource.UserListResource, '/api/v2/users')
+api.add_resource(user_resource.UserResource, '/api/v2/users/<int:user_id>')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -66,16 +71,6 @@ def register():
         db_sess.commit()
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
-
-
-@app.errorhandler(Exception)
-def not_found():
-    return make_response(jsonify({'error': 'Some happened'}), 404)
-
-
-@app.errorhandler(400)
-def bad_request():
-    return make_response(jsonify({'error': 'Bad request'}), 400)
 
 
 def main():
