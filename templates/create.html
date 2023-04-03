@@ -1,89 +1,317 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Создание теста</title>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Создание теста</title>
 	<style>
-		label {
-			display: block;
-			margin-bottom: 10px;
-			font-weight: bold;
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #263238;
+			color: #FFCA28;
 		}
-		input[type="text"], textarea {
+
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			background-color: #3A424B;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		}
+
+		h1 {
+			font-size: 32px;
+			text-align: center;
+			margin-bottom: 30px;
+			color: #FFCA28;
+		}
+
+		form {
+			display: flex;
+			flex-wrap: wrap;
+			margin-bottom: 20px;
+		}
+
+		.form-group {
+			flex: 1 1 100%;
+			margin-bottom: 20px;
+			position: relative;
+		}
+
+		.form-group label {
+			display: block;
+			font-size: 18px;
+			margin-bottom: 10px;
+		}
+
+		.form-group input[type="text"],
+		.form-group textarea {
 			width: 100%;
 			padding: 10px;
-			border: 1px solid #ccc;
+			border: 1px solid #CCC;
 			border-radius: 5px;
-			box-sizing: border-box;
-			margin-bottom: 20px;
 			font-size: 16px;
+			color: #FFCA28;
+			background-color: #253137;
 			resize: none;
+			box-sizing: border-box;
+			transition: border-color 0.2s ease-in-out;
+			border-color: #FFCA28;
 		}
-		#title-counter, #description-counter {
+
+		.form-group input[type="text"]:focus,
+		.form-group textarea:focus {
+			outline: none;
+			border-color: #FFCA28;
+		}
+
+		.form-group input[type="text"]:hover,
+		.form-group textarea:hover {
+			border-color: #FFCA28;
+		}
+
+		.form-group .character-count {
+
+			position: absolute;
+			bottom: 15px;
+			right: 5px;
 			font-size: 14px;
-			color: #666;
-			margin-bottom: 10px;
-			text-align: right;
+			color: #FFCA28;
+			border-color: #FFCA28;
 		}
-		#image-upload {
+
+		.form-group .image-uploads {
+			margin-top: 10px;
+		}
+
+		.form-group .image-uploads label {
 			display: block;
-			margin-bottom: 20px;
+			font-size: 18px;
+			margin-bottom: 10px;
 		}
-		.toggle-button {
+
+		.form-group .image-uploads .image-upload {
+			display: flex;
+			align-items: center;
+			margin-bottom: 10px;
+		}
+
+		.form-group .image-uploads .image-upload input[type="file"] {
+			display: none;
+		}
+
+		.form-group .image-uploads .image-upload .image-preview {
 			display: inline-block;
-			background-color: #ddd;
-			color: #333;
-			padding: 10px;
-			border-radius: 5px;
+			width: 50px;
+			height: 50px;
+			background-color: #FFCA28;
+			background-size: cover;
+			background-position: center;
 			margin-right: 10px;
-			cursor: pointer;
-			transition: background-color 0.3s;
 		}
-		.toggle-button.active {
-			background-color: #555;
-			color: #fff;
+
+		.form-group .image-uploads .image-upload .image-preview.has-image {
+						background-color: #FFCA28;
+		}
+
+		.form-group .image-uploads .image-upload .image-preview .remove-image {
+			display: none;
+			position: absolute;
+			top: -5px;
+			right: -5px;
+			width: 20px;
+			height: 20px;
+			background-color: #FFF;
+			border: 1px solid #CCC;
+			border-radius: 50%;
+			text-align: center;
+			line-height: 20px;
+			color: #CCC;
+			font-size: 14px;
+			cursor: pointer;
+			transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+		}
+
+		.form-group .image-uploads .image-upload .image-preview .remove-image:hover {
+			color: #FFF;
+			background-color: #FFCA28;
+			border-color: #FFCA28;
+		}
+
+		.form-group .image-uploads .image-upload:hover .image-preview .remove-image {
+			display: block;
+		}
+
+		.form-group .image-uploads .add-more-images {
+			display: inline-block;
+			font-size: 16px;
+			color: #FFCA28;
+			cursor: pointer;
+			transition: color 0.2s ease-in-out;
+			background-color: #FFCA28;
+		}
+
+		.form-group .image-uploads .add-more-images:hover {
+			color: #2699FB;
+
+
+		}
+
+		.form-group .toggle-buttons {
+			display: flex;
+			align-items: center;
+			margin-top: 10px;
+		}
+
+		.form-group .toggle-buttons label {
+			font-size: 18px;
+			margin-right: 20px;
+		}
+
+		.form-group .toggle-buttons input[type="radio"] {
+			display: none;
+		}
+
+		.form-group .toggle-buttons input[type="radio"] + label {
+			display: inline-block;
+			padding: 10px;
+			border: 1px solid #CCC;
+			border-radius: 5px;
+			font-size: 16px;
+			color: #FFCA28;
+			background-color: #253137;
+			border-color: #FFCA28;
+			cursor: pointer;
+			transition: background-color 0.2s ease-in-out;
+		}
+
+		.form-group .toggle-buttons input[type="radio"]:checked + label {
+			background-color: #FFCA28;
+			color: #253137;
+			border-color: #253137;
+		}
+
+		.form-group .submit-button {
+			display: inline-block;
+			padding: 10px 20px;
+			background-color: #253137;
+			border-color: #FFCA28;
+			border: none;
+			border-radius: 5px;
+			font-size: 18px;
+			color: #FFCA28;
+			cursor: pointer;
+			transition: background-color 0.2s ease-in-out;
+		}
+
+		.form-group .submit-button:hover {
+			background-color: #FFCA28;
+			color: #253137;
 		}
 	</style>
 </head>
 <body>
-	<h1>Создание теста</h1>
-	<form>
-		<label for="title">Название теста:</label>
-		<input type="text" id="title" name="title" maxlength="50">
-		<div id="title-counter"></div>
-
-		<label for="description">Описание:</label>
-		<textarea id="description" name="description" rows="5" maxlength="300"></textarea>
-		<div id="description-counter"></div>
-
-		<label for="image">Картинка:</label>
-		<input type="file" id="image-upload" name="image">
-
-		<label>Переключатель 1:</label>
-		<div class="toggle-button active">Вариант 1</div>
-		<div class="toggle-button">Вариант 2</div>
-
-		<label>Переключатель 2:</label>
-		<div class="toggle-button active">Вариант 1</div>
-		<div class="toggle-button">Вариант 2</div>
-		<div class="toggle-button">Вариант 3</div>
-
-		<button type="submit">Создать тест</button>
-	</form>
-
+	<div class="container">
+		<h1>Create Test</h1>
+		<form>
+			<div class="form-group">
+				<label for="test-name">Название теста:</label>
+				<input type="text" id="test-name" name="test-name" maxlength="50" required>
+				<div class="character-count"><span>0</span>/50</div>
+			</div>
+			<div class="form-group">
+				<label for="test-description">Описание теста
+					<textarea id="test-description" name="test-description" rows="5" maxlength="300" required></textarea>
+				<div class="character-count"><span>0</span>/300</div>
+			</div>
+			<div class="form-group">
+				<label for="test-images">Изображения Теста:</label>
+				<div class="image-uploads">
+					<div class="image-upload">
+						<label for="test-image-1">
+							<span class="image-preview"></span>
+							<input type="file" id="test-image-1" name="test-image-1" accept="image/*">
+							<div class="image-upload-label">Изображение №1</div>
+						</label>
+					</div>
+				</div>
+				<div class="add-more-images">Добавить ещё изображениея</div>
+			</div>
+			<div class="form-group">
+				<label for="test-type">Тип теста:</label>
+				<div class="toggle-buttons">
+					<input type="radio" id="test-type-1" name="test-type" value="type-1" checked>
+					<label for="test-type-1">Публичный</label>
+					<input type="radio" id="test-type-2" name="test-type" value="type-2">
+					<label for="test-type-2">Скрытый</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="test-difficulty">Test Difficulty:</label>
+				<div class="toggle-buttons">
+					<input type="radio" id="test-difficulty-1" name="test-difficulty" value="easy" checked>
+					<label for="test-difficulty-1">Easy</label>
+					<input type="radio" id="test-difficulty-2" name="test-difficulty" value="medium">
+					<label for="test-difficulty-2">Medium</label>
+					<input type="radio" id="test-difficulty-3" name="test-difficulty" value="hard">
+					<label for="test-difficulty-3">Hard</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="submit-button">Создать тест</button>
+			</div>
+		</form>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
-		const titleInput = document.getElementById('title');
-		const titleCounter = document.getElementById('title-counter');
-		titleInput.addEventListener('input', () => {
-			titleCounter.innerText = `Осталось символов: ${50 - titleInput.value.length}`;
-		});
+		$(document).ready(function() {
+			// Count characters in test name and test description fields
+			$('#test-name, #test-description').on('input', function() {
+				var maxLength = $(this).attr('maxlength');
+				var currentLength = $(this).val().length;
+				var $characterCount = $(this).parent().find('.character-count span');
+				$characterCount.text(currentLength);
+			});
 
-		const descriptionInput = document.getElementById('description');
-		const descriptionCounter = document.getElementById('description-counter');
-		descriptionInput.addEventListener('input', () => {
-			descriptionCounter.innerText = `Осталось символов: ${300 - descriptionInput.value.length}`;
+
+			$('.add-more-images').on('click', function() {
+				var numImages = $('.image-uploads .image-upload').length;
+				if (numImages < 16) {
+					var $newImageUpload = $('.image-uploads .image-upload').first().clone();
+					$newImageUpload.find('input').attr('id', 'test-image-' + (numImages + 1)).attr('name', 'test-image-' + (numImages + 1));
+										$newImageUpload.find('.image-preview').css('background-image', 'none');
+					$newImageUpload.find('.image-upload-label').text('Изображение №' + (numImages + 1));
+					$('.image-uploads').append($newImageUpload);
+				}
+			});
+
+
+			$('.image-uploads').on('change', 'input[type="file"]', function(e) {
+				var $imagePreview = $(this).siblings('.image-preview');
+				var file = e.target.files[0];
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					$imagePreview.css('background-image', 'url(' + e.target.result + ')');
+					$imagePreview.css('background-size', 'cover');
+					$imagePreview.css('background-position', 'center');
+				}
+				reader.readAsDataURL(file);
+			});
+
+
+			$('form').on('submit', function(e) {
+				var $imageUploads = $(this).find('.image-uploads .image-upload input[type="file"]');
+				for (var i = 0; i < $imageUploads.length; i++) {
+					var file = $imageUploads[i].files[0];
+					if (file && file.size > 5242880) { // 5 MB
+						alert('Image size is too large. Please choose an image less than 5 MB.');
+						e.preventDefault();
+						return;
+					}
+				}
+			});
 		});
 	</script>
 </body>
 </html>
+
+
