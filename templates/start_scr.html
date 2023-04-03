@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мой сайт</title>
+    <style>
+		.nav {
+
+			background-color: #263238;
+			overflow: hidden;
+		}
+
+		.nav a {
+			float: right;
+			color: #FFCA28;
+			text-align: center;
+			padding: 16px 16px;
+			text-decoration: none;
+            font-family: Verdana, Helvetica, Arial, sans-serif;
+		}
+
+		.nav a:hover {
+			background-color: #FFCA28;
+			color: black;
+		}
+		.split-container {
+              display: flex;
+              justify-content: center;
+              align-items: stretch;
+        }
+
+        .split-container .left-side,
+        .split-container .right-side {
+              flex-basis: 50%;
+              position: relative;
+        }
+
+        .split-container .left-side:before,
+        .split-container .right-side:before {
+              content: "";
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              width: 2px;
+              background-color: #3A424B;
+        }
+
+        .split-container .left-side:before {
+            left: 0;
+        }
+
+        .split-container .right-side:before {
+            right: 0;
+        }
+        .split-container {
+          /* ... */
+        }
+
+        .split-container .left-side,
+        .split-container .right-side {
+          /* ... */
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .split-container img {
+
+          max-width: 100%;
+        }
+
+        .split-container button {
+          display: block;
+          width: 757px;
+          height: 60px;
+
+          margin-top: 0px;
+          background-color: #FFCA28;
+          color: #253137;
+          font-size: 18px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        .split-container .left-button:hover,
+        .split-container .right-button:hover{
+          background-color: #253137;
+          color: #FFCA28;
+        }
+
+
+
+
+    </style>
+</head>
+<body bgcolor="#3A424B">
+
+<div class="nav">
+    <a href="register">Зарегистрироваться</a>
+    <a href="login">Войти</a>
+</div>
+
+<div class="split-container">
+    <div class="left-side">
+        <img src="/static/images/left.png" alt="Left Image">
+        <form action="create">
+            <button class="left-button">Создать тест</button>
+        </form>
+    </div>
+    <div class="right-side">
+        <img src="/static/images/right.png" alt="Right Image">
+        <form action="tests">
+            <button class="right-button">Пройти тест</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

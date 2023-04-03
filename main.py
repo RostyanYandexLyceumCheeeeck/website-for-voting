@@ -27,6 +27,13 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+@app.route('/', methods=['GET', 'POST'])
+def start_screan():
+    name = "create.jpg"
+    return render_template('start_scr.html')
+
+
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
@@ -64,7 +71,7 @@ def register():
                                    message="Такой пользователь уже есть")
         user = User(
             name=form.name.data,
-            email=form.email.data,
+            email=form.email.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
