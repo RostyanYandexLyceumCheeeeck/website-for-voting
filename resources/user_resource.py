@@ -16,8 +16,8 @@ def abort_if_user_not_found(email):
 parser = reqparse.RequestParser()
 parser.add_argument('id', required=True)
 parser.add_argument('name', required=True)
-parser.add_argument('created_date', required=True, type=bool)
-parser.add_argument('email', required=True, type=int)
+parser.add_argument('created_date', required=True, type=str)
+parser.add_argument('email', required=True, type=str)
 
 
 class UserResource(Resource):
@@ -25,7 +25,7 @@ class UserResource(Resource):
         user = abort_if_user_not_found(user_id)
         print("YEP", user)
         return jsonify({'user': user.to_dict(
-            only=('id', 'name', 'email'))})
+            only=('id', 'name', 'email', 'created_date'))})
 
     def delete(self, user_id):
         user = abort_if_user_not_found(user_id)
