@@ -60,7 +60,6 @@ def register():
         user = User(
             name=form.name.data,
             email=form.email.data,
-            about=form.about.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -80,6 +79,7 @@ def bad_request():
 
 
 def main():
+    db_session.global_init('db/DataBase.sqlite')
     app.run(host='127.0.0.1', port=5000, debug=True)
 
 
