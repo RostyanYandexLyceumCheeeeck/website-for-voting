@@ -1,10 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+	<title>Создание теста</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		label {
+			display: block;
+			margin-bottom: 10px;
+			font-weight: bold;
+		}
+		input[type="text"], textarea {
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			box-sizing: border-box;
+			margin-bottom: 20px;
+			font-size: 16px;
+			resize: none;
+		}
+		#title-counter, #description-counter {
+			font-size: 14px;
+			color: #666;
+			margin-bottom: 10px;
+			text-align: right;
+		}
+		#image-upload {
+			display: block;
+			margin-bottom: 20px;
+		}
+		.toggle-button {
+			display: inline-block;
+			background-color: #ddd;
+			color: #333;
+			padding: 10px;
+			border-radius: 5px;
+			margin-right: 10px;
+			cursor: pointer;
+			transition: background-color 0.3s;
+		}
+		.toggle-button.active {
+			background-color: #555;
+			color: #fff;
+		}
+	</style>
 </head>
 <body>
+	<h1>Создание теста</h1>
+	<form>
+		<label for="title">Название теста:</label>
+		<input type="text" id="title" name="title" maxlength="50">
+		<div id="title-counter"></div>
 
+		<label for="description">Описание:</label>
+		<textarea id="description" name="description" rows="5" maxlength="300"></textarea>
+		<div id="description-counter"></div>
+
+		<label for="image">Картинка:</label>
+		<input type="file" id="image-upload" name="image">
+
+		<label>Переключатель 1:</label>
+		<div class="toggle-button active">Вариант 1</div>
+		<div class="toggle-button">Вариант 2</div>
+
+		<label>Переключатель 2:</label>
+		<div class="toggle-button active">Вариант 1</div>
+		<div class="toggle-button">Вариант 2</div>
+		<div class="toggle-button">Вариант 3</div>
+
+		<button type="submit">Создать тест</button>
+	</form>
+
+	<script>
+		const titleInput = document.getElementById('title');
+		const titleCounter = document.getElementById('title-counter');
+		titleInput.addEventListener('input', () => {
+			titleCounter.innerText = `Осталось символов: ${50 - titleInput.value.length}`;
+		});
+
+		const descriptionInput = document.getElementById('description');
+		const descriptionCounter = document.getElementById('description-counter');
+		descriptionInput.addEventListener('input', () => {
+			descriptionCounter.innerText = `Осталось символов: ${300 - descriptionInput.value.length}`;
+		});
+	</script>
 </body>
 </html>
