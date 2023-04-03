@@ -3,7 +3,7 @@ import os
 import time
 import random
 
-from flask import Flask, render_template, redirect, make_response, jsonify
+from flask import Flask, render_template, redirect, make_response, jsonify, url_for
 from dotenv import load_dotenv
 from flask_login import login_user, LoginManager
 from flask_restful import Api
@@ -13,13 +13,19 @@ from data.__all_models import User
 from forms.registerForm import RegisterForm
 from forms.loginForm import LoginForm
 
-
 load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
+@app.route('/', methods=['GET', 'POST'])
+def start_screan():
+    name = "create.jpg"
+    return render_template('start_scr.html')
+
 
 
 @login_manager.user_loader
@@ -59,7 +65,7 @@ def register():
                                    message="Такой пользователь уже есть")
         user = User(
             name=form.name.data,
-            email=form.email.data,
+            email=form.email.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
