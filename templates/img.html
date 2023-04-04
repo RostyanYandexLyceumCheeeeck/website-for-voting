@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Images</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='img.css') }}">
+</head>
+<body>
+    <div class="container">
+        {% if not isimg %}
+            <h1>Загрузить изображения({{ kol }})</h1>
+        {% else %}
+            <h2>Загрузите изображения({{ kol }})!!!</h2>
+        {% endif %}
+    <div/>
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            {{ form.images }}
+            {{ form.submit }}
+        </form>
+    </div>
+</body>
+</html>
