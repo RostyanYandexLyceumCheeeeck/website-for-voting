@@ -5,7 +5,7 @@ import random
 
 from flask import Flask, render_template, redirect, make_response, jsonify
 from dotenv import load_dotenv
-from flask_login import login_user, LoginManager
+from flask_login import login_user, LoginManager, logout_user, login_required, current_user
 from flask_restful import Api
 
 from data import db_session
@@ -33,7 +33,6 @@ def start_screan():
     return render_template('start_scr.html')
 
 
-
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
@@ -49,7 +48,7 @@ def login():
         time.sleep(random.random())
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            return redirect("/profile")
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
@@ -80,9 +79,26 @@ def register():
     return render_template('register.html', title='Регистрация', form=form)
 
 
+@app.route('/profile', methods=['GET'])
+def profile():
+    return render_template('profile.html')
+
+
+@app.route('/settings-profile', methods=['GET'])
+def settings_profile():
+    return render_template('settings-profile.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
 def main():
     db_session.global_init('db/DataBase.sqlite')
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
 
 if __name__ == '__main__':
