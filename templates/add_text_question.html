@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Webpage</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='add_text_question.css') }}">
+</head>
+<body>
+{% for i in range(ln) %}
+<div class="container">
+    <div class="left">
+        <img src='static/images/{{img[i]}}' alt="Left Image ">
+    </div>
+    <div class="right">
+        <h2>Ask a question {{i + 1}}</h2>
+        <form action="" method="post" id="12">
+            <div class="id">
+                <input type="text" value="{{i}}" name="id">
+            </div>
+            <label for="question">Question:</label>
+            <input type="text" id="5" name="question" >
+            <label for="description">Description:</label>
+            <textarea id="2" name="description"></textarea>
+            <input type="submit" value="Submit" id="btn">
+
+        </form>
+    </div>
+</div>
+{% endfor %}
+
+<div class="next">
+    <form action="" method="post" id="101010">
+        <div class="id">
+            <input type="text" value="end" name="next">
+        </div>
+        <input type="submit" value="Submit" id="qwe">
+    </form>
+</div>
+{% if mas %}
+<script>
+    let a = {{mas}}.join(" ");
+    alert('Вы не ввели значение для вопросов номер: ' + a);
+</script>
+{% endif %}
+</body>
+</html>
