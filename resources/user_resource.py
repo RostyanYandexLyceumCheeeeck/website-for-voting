@@ -23,7 +23,6 @@ parser.add_argument('email', required=True, type=str)
 class UserResource(Resource):
     def get(self, user_id: int):
         user = abort_if_user_not_found(user_id)
-        print("YEP", user)
         return jsonify({'user': user.to_dict(
             only=('id', 'name', 'email', 'created_date'))})
 
