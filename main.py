@@ -13,7 +13,6 @@ from data import db_session
 from data.__all_models import User
 from forms.registerForm import RegisterForm
 from forms.loginForm import LoginForm
-from routes import users_api
 from resources import user_resource
 
 load_dotenv()
@@ -30,8 +29,12 @@ login_manager.init_app(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def start_screan():
-    name = "create.jpg"
     return render_template('start_scr.html')
+
+
+@app.route('/create', methods=['GET', 'POST'])
+def start_scre1an():
+    return render_template('create.html')
 
 
 @login_manager.user_loader
