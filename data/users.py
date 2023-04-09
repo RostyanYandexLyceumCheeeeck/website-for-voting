@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
-    __tablename__ = 'users'
+    __tablename__ = 'Users'
 
     id = sqlalchemy.Column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = Column(String, nullable=True)

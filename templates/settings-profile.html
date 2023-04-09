@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Страница настроек</title>
+  <style>
+    body {
+      background-color: #3a454b;
+    }
+    .container {
+      display: flex;
+      margin: 50px;
+      text-align: center;
+    }
+    .left-section {
+      flex: 1;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 20%;
+
+    }
+    .avatar {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            margin: auto;
+            margin-bottom: 30px;
+            margin-top: 25px;
+            background-color: #4CAF50;
+        }
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      width: 75%;
+      margin: auto;
+
+
+    }
+    .btn {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    .password-btn {
+      margin-top: 20px;
+    }
+    .right-section {
+      flex: 2;
+      padding: 50px;
+      background-color: #263238;
+      color: #fff;
+      margin-top: 50px;
+      max-width: 80%;
+      text-align: center;
+    }
+    .input-group {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .input-group label {
+      width: 70px;
+      margin-right: 5px;
+    }
+    .input-group input {
+      flex: 1;
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+    .form-btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .profile-photo {
+      width: 300px;
+      height: 470px;
+      border-radius: 25px;
+      text-align: center;
+      background-image: url("/static/images/left.png");
+      background-repeat:no-repeat;
+      background-position: center center;
+      color: #df396a;
+    }
+    .text {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-section">
+      <div class="profile-photo">
+        <img src="/static/images/right.png" alt="Аватар пользователя" class="avatar">
+        <div class="btn-group">
+          <div class="text"> фото профиля </div>
+          <button class="btn">Загрузить</button>
+          <div class="text"> фон фото профиля </div>
+          <button class="btn">Загрузить фон аватара</button>
+        </div>
+      </div>
+      <button class="btn password-btn">Изменить пароль</button>
+    </div>
+    <div class="right-section">
+      <form>
+        <div class="input-group">
+          <label for="login1">Логин:</label>
+          <input type="text" id="login1">
+        </div>
+        <div class="input-group">
+          <label for="login2">Логин:</label>
+          <input type="text" id="login2">
+        </div>
+        <div class="input-group">
+          <label for="login3">Логин:</label>
+          <input type="text" id="login3">
+        </div>
+        <div class="form-btn-group">
+          <button class="btn">Сохранить изменения</button>
+          <button class="btn">Сбросить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
