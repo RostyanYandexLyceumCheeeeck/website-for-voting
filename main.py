@@ -132,9 +132,54 @@ def add_text_question():
             if len(need_id) != 0:
                 return render_template('add_text_question.html', img=name_img, ln=len(name_img), mas=need_id)
             else:
-                pass
+                return redirect('/')
     return render_template('add_text_question.html', img=name_img, ln=len(name_img), mas=[])
 
+@app.route('/test')
+def index():
+    items = [
+        {
+            "title": "Item 1",
+            "image": "https://via.placeholder.com/300x300",
+            "description": "Description of Item 1",
+            "detail1": "qwe",
+            "detail2": "qwe",
+            "detail3": "qwe"
+        },
+        {
+            "title": "Item 2",
+            "image": "https://via.placeholder.com/300x300",
+            "description": "Description of Item 2",
+            "detail1": "qwe",
+            "detail2": "qwe",
+            "detail3": "qwe"
+        },
+        {
+            "title": "Item 3",
+            "image": "https://via.placeholder.com/300x300",
+            "description": "Description of Item 3",
+            "detail1": "qwe",
+            "detail2": "qwe",
+            "detail3": "qwe"
+        },
+        {
+            "title": "Item 2",
+            "image": "https://via.placeholder.com/300x300",
+            "description": "Description of Item 2",
+            "detail1": "qwe",
+            "detail2": "qwe",
+            "detail3": "qwe"
+        },
+        {
+            "title": "Item 2",
+            "image": "https://via.placeholder.com/300x300",
+            "description": "GHBdtn Как дела соси у ле   йм чмо придор уелбан ты ",
+            "detail1": "qwe",
+            "detail2": "qwe",
+            "detail3": "qwe"
+        }
+    ]
+    return render_template('test_change.html', items=items)
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
@@ -214,7 +259,7 @@ def main():
     session = db_session.create_session()
     my_test = data.tests.Test()
     qwe = my_test.get_test(session, 1)
-    print(qwe)
+
     zxc = {'questions': [{'id': 3, 'name': 'first_question', 'test_id': 3, 'description': 'vopros',
                           'answers': [{'file': {'name': 'image', 'created_date': '2023-04-06 12:29:34',
                                                 'path': '/path/to/image', 'id': 3}, 'id': 3, 'name': 'first_answer',
