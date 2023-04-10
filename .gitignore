@@ -5,3 +5,4 @@
 venv
 db/DataBase.sqlite
 .db/
+db/DBase.sqlite
