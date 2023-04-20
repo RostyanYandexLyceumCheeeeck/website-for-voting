@@ -17,4 +17,4 @@ class Answer(SqlAlchemyBase, UserMixin, SerializerMixin):
     name: Mapped[str] = Column(String, nullable=False)
     description: Mapped[str] = Column(String, nullable=True)
     test_id: Mapped[int] = Column(Integer, ForeignKey('Tests.id'), nullable=False)
-    file = relationship(File)
+    file = relationship(File, uselist=False)

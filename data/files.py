@@ -9,11 +9,10 @@ from sqlalchemy.orm import Mapped
 from flask_login import UserMixin
 
 
-class File(SqlAlchemyBase, UserMixin, SerializerMixin):
+class File(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'Files'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = Column(String, nullable=False)
     path: Mapped[str] = Column(String, nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.now)
     answer_id: Mapped[int] = Column(Integer, ForeignKey('Answers.id'), nullable=False)

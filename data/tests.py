@@ -18,11 +18,10 @@ class Test(SqlAlchemyBase, UserMixin, SerializerMixin):
     name: Mapped[str] = Column(String, nullable=False)
     description: Mapped[str] = Column(String, nullable=True)
     user_id: Mapped[int] = Column(Integer, ForeignKey('Users.id'), nullable=False)
-    type: Mapped[str] = Column(String, nullable=False, default='Image')
     image: Mapped[str] = Column(String, nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.now)
     is_published: Mapped[bool] = Column(Boolean, default=False)
-    answers = relationship(Answer)
+    answers = relationship(Answer, uselist=True)
 
     def get_test(self, session, test_id: int):
         """
@@ -42,19 +41,21 @@ class Test(SqlAlchemyBase, UserMixin, SerializerMixin):
         :param my_test: словарь с данными теста
         :return: None
         """
-        for answer_data in my_test['answers']:
-            file_data = answer_data['file']
-            time = datetime.datetime.strptime(file_data['created_date'], '%Y-%m-%d %H:%M:%S')
-            file = File(name=file_data['name'], path=file_data['path'], created_date=time, answer_id=file_data['answer_id'])
-            session.add(file)
-
-            answer = Answer(name=answer_data['name'], description=answer_data['description'],
-                            test_id=answer_data['test_id'])
-            session.add(answer)
-
-        time = datetime.datetime.strptime(my_test['created_date'], '%Y-%m-%d %H:%M:%S')
-        test = Test(name=my_test['name'], description=my_test['description'], type=my_test['type'],
-                    image=my_test['image'], created_date=time,
-                    is_published=my_test['is_published'], answers=[answer], user_id=my_test['user_id'])
+        answers = my_test.pop('answers')
+        test = Test(**my_test)
         session.add(test)
+        session.flush()
+
+        for answer_data in answers:
+            file_data = answer_data.pop('file')
+            answer_data['test_id'] = test.id
+            answer = Answer(**answer_data)
+            test.answers.append(answer)
+            session.add(answer)
+            session.flush()
+
+            file_data['answer_id'] = answer.id
+            file = File(**file_data)
+            session.add(file)
+            answer.file = file
         session.commit()

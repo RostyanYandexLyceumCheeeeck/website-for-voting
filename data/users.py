@@ -16,7 +16,7 @@ from data.tests import Test
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'Users'
 
-    id = sqlalchemy.Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = Column(String, nullable=True)
     email: Mapped[str] = Column(String, nullable=False, unique=True)
     hashed_password = Column(String, nullable=False)
