@@ -121,7 +121,7 @@ def add_text_question():
             session['test'] = test
         else:
             test = session.get('test', None)
-            data = test['question']
+            data = test['answers']
             id = list(map(int, list(i['id'] for i in data)))
             need_id = []
             for i in range(len(name_img)):
