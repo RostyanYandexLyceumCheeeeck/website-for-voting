@@ -4,7 +4,7 @@ import sqlite3
 import time
 import random
 
-from flask import Flask, render_template, redirect, make_response, jsonify, request, session
+from flask import Flask, render_template, redirect, make_response, jsonify, request, session, url_for
 from dotenv import load_dotenv
 from flask_login import login_user, LoginManager, logout_user, login_required, current_user
 from flask_restful import Api
@@ -120,7 +120,8 @@ def add_text_question():
                 test['answers'][ind] = answer
             session['test'] = test
         else:
-
+            test = session.get('test', None)
+            data = test['answers']
             id = list(map(int, list(i['id'] for i in data)))
             need_id = []
             for i in range(len(name_img)):
@@ -130,6 +131,9 @@ def add_text_question():
             if len(need_id) != 0:
                 return render_template('add_text_question.html', img=name_img, ln=len(name_img), mas=need_id)
             else:
+                test = session.get('test', None)
+
+                return redirect('/')
                 answers = []
                 for answer in test['answers']:
                     answer.pop('id')
@@ -149,10 +153,13 @@ def add_text_question():
     return render_template('add_text_question.html', img=name_img, ln=len(name_img), mas=[])
 
 
-@app.route('/test')
-def index():
+@app.route('/tests', methods=['GET', 'POST'])
+def change_test():
+    session['all'] = None
+    session['choise'] = 0
     items = [
         {
+            "id": 1,
             "title": "Item 1",
             "image": "https://via.placeholder.com/300x300",
             "description": "Description of Item 1",
@@ -161,6 +168,7 @@ def index():
             "detail3": "qwe"
         },
         {
+            "id": 2,
             "title": "Item 2",
             "image": "https://via.placeholder.com/300x300",
             "description": "Description of Item 2",
@@ -169,6 +177,7 @@ def index():
             "detail3": "qwe"
         },
         {
+            "id": 3,
             "title": "Item 3",
             "image": "https://via.placeholder.com/300x300",
             "description": "Description of Item 3",
@@ -177,28 +186,108 @@ def index():
             "detail3": "qwe"
         },
         {
+            "id": 4,
             "title": "Item 2",
-            "image": "https://via.placeholder.com/300x300",
+            "image": "/static/images/end.gif",
             "description": "Description of Item 2",
             "detail1": "qwe",
             "detail2": "qwe",
             "detail3": "qwe"
         },
         {
+            "id": 5,
             "title": "Item 2",
-            "image": "https://via.placeholder.com/300x300",
-            "description": "GHBdtn Как дела соси у ле   йм чмо придор уелбан ты ",
+            "image": "/static/images/end.gif",
+            "description": "GHBdtn",
             "detail1": "qwe",
             "detail2": "qwe",
             "detail3": "qwe"
         }
     ]
+    if request.method == 'POST':
+        content = request.json
+        session['id'] = content['id']
+        return redirect('/test')
     return render_template('test_change.html', items=items)
 
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
-    return render_template('test.html')
+    zxc = {'answers': [{'file': {'created_date': '2023-04-06 12:29:34',
+                                 'path': '/static/images/end.gif', 'id': 3, 'answer_id': 3}, 'id': 3,
+                        'name': 'first_answer',
+                        'test_id': 3, 'description': 'pervii otvet'},
+                       {'file': {'created_date': '2023-04-06 12:29:34',
+                                 'path': '/static/images/end1.gif', 'id': 4, 'answer_id': 4}, 'id': 4,
+                        'name': 'second_answer',
+                        'test_id': 3, 'description': 'vtoroii otvet'}, {'file': {'created_date': '2023-04-06 12:29:34',
+                                                                                 'path': '/static/images/Снимок экрана (48).png',
+                                                                                 'id': 4, 'answer_id': 4}, 'id': 4,
+                                                                        'name': 'second_answer',
+                                                                        'test_id': 3, 'description': 'vtoroii otvet'},
+                       {'file': {'created_date': '2023-04-06 12:29:34',
+                                 'path': '/static/images/left.png', 'id': 3, 'answer_id': 3}, 'id': 3,
+                        'name': 'first_answer',
+                        'test_id': 3, 'description': 'pervii otvet'},
+                       {'file': {'created_date': '2023-04-06 12:29:34',
+                                 'path': '/static/images/right.png', 'id': 4, 'answer_id': 4}, 'id': 4,
+                        'name': 'second_answer',
+                        'test_id': 3, 'description': 'vtoroii otvet'}, {'file': {'created_date': '2023-04-06 12:29:34',
+                                                                                 'path': '/static/images/Снимок экрана (48).png',
+                                                                                 'id': 4, 'answer_id': 4}, 'id': 4,
+                                                                        'name': 'second_answer',
+                                                                        'test_id': 3, 'description': 'vtoroii otvet'}],
+           'info': {'id': 3, 'created_date': '2024-04-06 12:29:34', 'user_id': 1, 'is_published': False,
+                    'description': 'qweqweqwe', 'image': '/path', 'name': 'first_test', 'type': 'Image'}}
+    session['test_inf'] = zxc['info']
+    if session.get('all', None) is not None:
+        ls_in_suit = session['ls_in_suit']
+        ls_all = session['all']
+    else:
+        ls_all = zxc['answers']
+        ls_in_suit = random.sample(ls_all, 2)
+        for ans in ls_in_suit:
+            ls_all.remove(ans)
+        session['all'] = ls_all
+        session['ls_in_suit'] = ls_in_suit
+
+    if request.method == 'POST':
+        content = request.json
+        session['all'] = ls_all
+        if content['section'] == 'left':
+            if len(ls_all) == 0:
+                session['win'] = ls_in_suit[0]
+                return redirect('/test/end')
+            rem = random.sample(ls_all, 1)
+            ls_in_suit = [ls_in_suit[0]] + rem
+            session['choise'] = 1
+            ls_all.remove(*rem)
+        else:
+            if len(ls_all) == 0:
+                session['win'] = ls_in_suit[1]
+                return redirect('/test/end')
+            rem = random.sample(ls_all, 1)
+            ls_in_suit = [ls_in_suit[1]] + rem
+            session['choise'] = 2
+            ls_all.remove(*rem)
+        session['ls_in_suit'] = ls_in_suit
+        return redirect('/test')
+    left = ls_in_suit[0]
+    right = ls_in_suit[1]
+    return render_template('test_inf.html', left=left, right=right, choise=session['choise'])
+
+
+@app.route('/test/end', methods=['GET', 'POST'])
+def end():
+    form = ImageForm()
+    inf = session['test_inf']
+    if request.method == 'POST':
+        dictt = request.form.to_dict()
+        if dictt == {}:
+            return redirect('/')
+        else:
+            return redirect('/')  # СЮДА НАДО ДОБАВИТЬ ДОБАВЛЕНИЕ РЕЙТИНГА В ДБ
+    return render_template('end.html', win=session['win'], inf=inf, form=form)
 
 
 @login_manager.user_loader

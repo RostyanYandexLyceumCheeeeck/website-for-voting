@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Победитель</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #FFCA28;
+            font-family: Arial, sans-serif;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #263238; /* Серый цвет фона */
+            z-index: -1; /* Поместить фон под остальные элементы */
+        }
+
+        .fireworks {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			background-color: #3A424B;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .title {
+            font-size: 36px;
+        }
+
+        .subtitle {
+            font-size: 24px;
+        }
+
+        .winner-image {
+            margin-top: 16px;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .button {
+            margin-top: 5%;
+            background-color: #253137;
+			color: #FFCA28;
+			border: none;
+			border-radius: 8px;
+			padding: 20px 20px;
+			font-size: 18px;
+			cursor: pointer;
+			transition: background-color 0.2s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #FFCA28;
+			color: #253137;
+        }
+        .rating-area {
+            overflow: hidden;
+	        width: 225px;
+	        margin: 0 auto;
+	        margin-top: 8%;
+
+        }
+        .rating-area:not(:checked) > input {
+            display: none;
+        }
+        .rating-area:not(:checked) > label {
+            float: right;
+            width: 42px;
+            padding: 0;
+            cursor: pointer;
+            font-size: 32px;
+            line-height: 32px;
+            color: lightgrey;
+            text-shadow: 1px 1px #bbb;
+        }
+        .rating-area:not(:checked) > label:before {
+            content: '★';
+        }
+        .rating-area > input:checked ~ label {
+            color: #FFCA28;
+            text-shadow: 1px 1px #c60;
+        }
+        .rating-area:not(:checked) > label:hover,
+        .rating-area:not(:checked) > label:hover ~ label {
+            color: #FFCA28;
+        }
+        .rating-area > input:checked + label:hover,
+        .rating-area > input:checked + label:hover ~ label,
+        .rating-area > input:checked ~ label:hover,
+        .rating-area > input:checked ~ label:hover ~ label,
+        .rating-area > label:hover ~ input:checked ~ label {
+            color: #FFCA28;
+            text-shadow: 1px 1px goldenrod;
+        }
+        .rate-area > label:active {
+            position: relative;
+        }
+
+    </style>
+</head>
+<body>
+<div class="background"></div>
+<div class="container">
+    <h1 class="title">{{ inf.name }}</h1>
+    <p class="subtitle">Победитель:</p>
+    <p class="subtitle">{{ win.description }} 💥💣💥🎉🎈</p>
+    <img class="winner-image" src="{{ win.file.path }}" alt="Winner Image">
+    <form method="post">
+        <div class="rating-area">
+            <input type="radio" id="star-5" name="rating" value="5">
+            <label for="star-5" title="Оценка «5»"></label>
+            <input type="radio" id="star-4" name="rating" value="4">
+            <label for="star-4" title="Оценка «4»"></label>
+            <input type="radio" id="star-3" name="rating" value="3">
+            <label for="star-3" title="Оценка «3»"></label>
+            <input type="radio" id="star-2" name="rating" value="2">
+            <label for="star-2" title="Оценка «2»"></label>
+            <input type="radio" id="star-1" name="rating" value="1">
+            <label for="star-1" title="Оценка «1»"></label>
+        </div>
+        <button class="button" onclick="goToMainScreen()">Вернуться на главный экран</button>
+    </form>
+</div>
+</body>
+</html>
