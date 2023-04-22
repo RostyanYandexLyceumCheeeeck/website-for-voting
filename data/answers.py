@@ -15,7 +15,6 @@ class Answer(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = Column(String, nullable=False)
-    file_id: Mapped[int] = Column(Integer, ForeignKey('Files.id'), nullable=False)
     description: Mapped[str] = Column(String, nullable=True)
-    question_id: Mapped[int] = Column(Integer, ForeignKey('Questions.id'), nullable=False)
-    file = relationship(File)
+    test_id: Mapped[int] = Column(Integer, ForeignKey('Tests.id'), nullable=False)
+    file = relationship(File, uselist=False)

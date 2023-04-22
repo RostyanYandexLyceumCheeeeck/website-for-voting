@@ -1,5 +1,6 @@
 import datetime
 import os
+import sqlite3
 import time
 import random
 
@@ -10,9 +11,8 @@ from flask_restful import Api
 from wtforms import MultipleFileField, SubmitField
 from flask_wtf import FlaskForm
 
-import data.tests
 from data import db_session
-from data.__all_models import User
+from data.__all_models import User, Test
 from forms.registerForm import RegisterForm
 from forms.loginForm import LoginForm
 from resources import user_resource
@@ -69,8 +69,8 @@ def start_scre1an():
         data['test_kol'] = test_kol
         data['preview'] = path
         session['img'] = data
-        test = {"head": data, 'question': []}
-        session['test'] = test
+        data['answers'] = []
+        session['test'] = data
         return redirect('/img')
 
 
@@ -88,8 +88,8 @@ def upload_images():
         if all(ls_is_img) and len(form.images.data) == \
                 kol_img:
             for image in form.images.data:
-                filname = image.filename
-                path = os.path.join('static/images', filname)
+                filename = image.filename
+                path = os.path.join('static/images', filename)
                 image.save(path)
             return redirect("/add")
         else:
@@ -102,22 +102,22 @@ def add_text_question():
     name_img = session.get('img_name', None)
     message = ''
     if request.method == 'POST':
+        test = session.get('test', None)
+        data = test['answers']
         if request.form.get('next') is None:
             question = request.form.get('question')
             description = request.form.get('description')
-            id_ = request.form.get('id')
+            id_ = int(request.form.get('id'))
             que = {}
-            que['question'] = question
-            que['description'] = description
-            content = {'id': id_, 'data': que}
-            test = session.get('test', None)
-            data = test['question']
+            que['path'] = os.path.join('static/images', name_img[int(id_)])
+
+            answer = {'file': que, 'name': question, 'description': description, 'id': id_}
             asd = list(filter(lambda x: x['id'] == id_, data))
             if len(asd) == 0:
-                test['question'].append(content)
+                test['answers'].append(answer)
             else:
-                ind = test['question'].index(*asd)
-                test['question'][ind] = content
+                ind = test['answers'].index(*asd)
+                test['answers'][ind] = answer
             session['test'] = test
         else:
             test = session.get('test', None)
@@ -134,6 +134,22 @@ def add_text_question():
                 test = session.get('test', None)
 
                 return redirect('/')
+                answers = []
+                for answer in test['answers']:
+                    answer.pop('id')
+                    answers.append(answer)
+                test_to_db = {
+                    'is_published': test['test_type'] != 'hidden',
+                    'description': test['test_description'],
+                    'image': test['preview'],
+                    'name': test['test_name'],
+                    'user_id': session['user_id'],
+                    'answers': answers
+                }
+                my_test = Test()
+                db_sess = db_session.create_session()
+                my_test.insert_test(db_sess, **test_to_db)
+                return redirect('/profile')
     return render_template('add_text_question.html', img=name_img, ln=len(name_img), mas=[])
 
 
@@ -289,6 +305,7 @@ def login():
         time.sleep(random.random())
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
+            session['user_id'] = user.id
             return redirect("/profile")
         return render_template('login.html',
                                message="Неправильный логин или пароль",
@@ -338,26 +355,13 @@ def settings_profile():
 @login_required
 def logout():
     if current_user.is_authenticated:
+        session['user_id'] = None
         logout_user()
     return redirect("/")
 
 
 def main():
-    db_session.global_init('db/DataBase.sqlite')
-    session = db_session.create_session()
-    my_test = data.tests.Test()
-    qwe = my_test.get_test(session, 1)
-
-    zxc = {'questions': [{'id': 3, 'name': 'first_question', 'test_id': 3, 'description': 'vopros',
-                          'answers': [{'file': {'name': 'image', 'created_date': '2023-04-06 12:29:34',
-                                                'path': '/path/to/image', 'id': 3}, 'id': 3, 'name': 'first_answer',
-                                       'question_id': 3, 'description': 'pervii otvet', 'file_id': 3},
-                                      {'file': {'name': 'two_image', 'created_date': '2023-04-06 12:29:34',
-                                                'path': '/path/to/do', 'id': 4}, 'id': 4, 'name': 'second_answer',
-                                       'question_id': 3, 'description': 'vtoroii otvet', 'file_id': 4}]}], 'id': 3,
-           'created_date': '2024-04-06 12:29:34', 'is_published': False, 'description': 'qweqweqwe', 'image': '/path',
-           'name': 'first_test', 'type': 'Image'}
-    my_test.insert_test(session=session, **zxc)
+    db_session.global_init('db/DBase.sqlite')
     app.run(host='0.0.0.0', port=5000, debug=True)
 
 
