@@ -102,55 +102,61 @@
         font-weight: bold;
       }
 
+
     </style>
 </head>
 <body>
 <h1>My Items</h1>
 <div class="container">
     {% for item in items %}
-    <div class="item" onclick="sendPost('{{ item.id }}')">
+    <div class="item" onclick="selectImage('{{ item.id }}')">
         <div class="item-image">
-            <img src="{{ item.image }}" alt="{{ item.title }}">
+            <img src="{{ item.image }}" alt="{{ item.name }}">
             <a href="#" class="item-btn">View Details</a>
         </div>
         <div class="item-title">{{ item.title }}</div>
         <div class="item-description">{{ item.description }}</div>
         <div class="item-details d-flex justify-content-around">
             <div class="d-flex flex-row">
-                {{ item.detail1 }}
+                qqwe
             </div>
             <div class="d-flex flex-row">
-                {{ item.detail1 }}
+                qwe
             </div>
             <div class="d-flex flex-row">
-                {{ item.detail1 }}
+                qwe
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
 <script>
-    function sendPost(a) {
-      fetch('/test', {
+    function selectImage(id_t) {
+    const endpointUrl = '/tests';
+    const requestData = {id: id_t};
+
+    fetch(endpointUrl, {
         method: 'POST',
-        body: JSON.stringify({id: a}),
         headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+            throw new Error('Network response was not ok');
         }
-        return response.json();
-      })
-      .then(data => {
+        if (response.redirected) {window.location.href = response.url}
+    })
+    .then(data => {
         console.log(data);
-      })
-      .catch(error => {
+    })
+    .catch(error => {
+        alert("nigga");
         console.error('There was a problem with the fetch operation:', error);
-      });
-    }
+    });
+}
+
 
 </script>
 </body>
