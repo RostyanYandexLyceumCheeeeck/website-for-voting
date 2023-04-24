@@ -18,8 +18,16 @@
 			text-decoration: none;
             font-family: Verdana, Helvetica, Arial, sans-serif;
 		}
+		.nav a {
+		    margin-left: 30px;
+		}
 
-		.nav a:hover {
+        .nav .pick a {
+            float: left;
+		    margin-left:0px;
+		    padding: 0px 0px;
+		}
+		.nav .ak a:hover {
 			background-color: #FFCA28;
 			color: black;
 		}
@@ -27,6 +35,8 @@
               display: flex;
               justify-content: center;
               align-items: stretch;
+              margin_top: 0px;
+
         }
 
         .split-container .left-side,
@@ -98,8 +108,19 @@
 <body bgcolor="#3A424B">
 
 <div class="nav">
-    <a href="register">Зарегистрироваться</a>
-    <a href="login">Войти</a>
+    <div class="pick">
+    <a href="/">
+        <img src="/static/images/logo.svg" >
+    </a>
+    </div>
+    <div class="ak">
+        {% if not flag %}
+            <a href="register">Зарегистрироваться</a>
+            <a href="login">Войти</a>
+        {% else %}
+            <a href="profile">Профиль</a>
+        {% endif %}
+    </div>
 </div>
 
 <div class="split-container">

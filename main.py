@@ -36,32 +36,40 @@ class ImageForm(FlaskForm):
 
 @app.route('/', methods=['GET', 'POST'])
 def start_screan():
-    return render_template('start_scr.html')
+    flag = False
+    if current_user.is_authenticated:
+        flag = True
+
+    return render_template('start_scr.html', flag=flag)
 
 
 @app.route('/create', methods=['GET', 'POST'])
 def start_scre1an():
     form = ImageForm()
+    akk = False
+    if current_user.is_authenticated:
+        akk = True
+
     test_name = request.form.get('test-name')
     test_description = request.form.get('test-description')
     test_type = request.form.get('test-type')
     test_kol = request.form.get('test-kol')
     if test_kol is None:
-        return render_template('create.html', flag=False, form=form, file=False)
+        return render_template('create.html', flag=False, form=form, file=False, akk=akk)
     else:
         try:
             test_kol = int(test_kol)
         except Exception:
-            return render_template('create.html', flag=True, form=form, file=False)
+            return render_template('create.html', flag=True, form=form, file=False, akk=akk)
         if len(form.images.data) != 1:
-            return render_template('create.html', flag=True, form=form, file=True)
+            return render_template('create.html', flag=True, form=form, file=True, akk=akk)
         filename = form.images.data[0].filename
         file = form.images.data[0]
         if filename.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp', '.jfif')):
             path = os.path.join('static/images', filename)
             file.save(path)
         else:
-            return render_template('create.html', flag=True, form=form, file=True)
+            return render_template('create.html', flag=True, form=form, file=True, akk=akk)
         data = {}
         data['test_name'] = test_name
         data['test_description'] = test_description
@@ -137,7 +145,6 @@ def add_text_question():
                     answer.pop('id')
                     answers.append(answer)
 
-
                 test_to_db = {
                     'is_published': test['test_type'] != 'hidden',
                     'description': test['test_description'],
@@ -156,6 +163,7 @@ def add_text_question():
 
 @app.route('/tests', methods=['GET', 'POST'])
 def change_test():
+
     session['all'] = None
     session['choise'] = 0
     db_sess = db_session.create_session()
@@ -165,7 +173,6 @@ def change_test():
         items.append(my_test.get_test(db_sess, i))
     if request.method == 'POST':
         content = request.json
-        print(content)
         session['id'] = my_test.get_test(db_sess, content['id'])
         return redirect('/test')
     return render_template('test_change.html', items=items)
@@ -277,7 +284,13 @@ def register():
 @app.route('/profile', methods=['GET'])
 def profile():
     if current_user.is_authenticated:
-        return render_template('profile.html')
+        db_sess = db_session.create_session()
+        my_test = Test()
+        items = []
+        for i in range(1, 3):
+            items.append(my_test.get_test(db_sess, i))
+        return render_template('profile.html', items=items)
+
     return redirect("/login")
 
 

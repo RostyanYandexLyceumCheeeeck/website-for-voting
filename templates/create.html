@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Создание теста</title>
-	<style>
+    <meta charset="UTF-8">
+    <title>Создание теста</title>
+    <style>
 		body {
 			font-family: Arial, sans-serif;
 			background-color: #263238;
@@ -272,60 +272,102 @@
 			background-color: #FFCA28;
 			color: #253137;
 		}
+		.nav {
 
-	</style>
+			background-color: #263238;
+			overflow: hidden;
+		}
+
+		.nav a {
+			float: right;
+			color: #FFCA28;
+			text-align: center;
+			padding: 16px 16px;
+			text-decoration: none;
+            font-family: Verdana, Helvetica, Arial, sans-serif;
+		}
+		.nav a {
+		    margin-left: 30px;
+		}
+
+        .nav .pick a {
+            float: left;
+		    margin-left:0px;
+		    padding: 0px 0px;
+		}
+		.nav .ak a:hover {
+			background-color: #FFCA28;
+			color: black;
+		}
+
+    </style>
 </head>
 <body>
-	<div class="container">
-		<h1>Create Test</h1>
-		<form method="post", enctype="multipart/form-data">
-			<div class="form-group">
-				<label for="test-name">Название теста:</label>
-				<input type="text" id="test-name" name="test-name" maxlength="50" required>
-				<div class="character-count"><span>0</span>/50</div>
-			</div>
+<div class="nav">
+    <div class="pick">
+    <a href="/">
+        <img src="/static/images/logo.svg" >
+    </a>
+    </div>
+    <div class="ak">
+        {% if not akk %}
+            <a href="register">Зарегистрироваться</a>
+            <a href="login">Войти</a>
+        {% else %}
+            <a href="profile">Профиль</a>
+        {% endif %}
+    </div>
+</div>
+<div class="container">
+    <h1>Create Test</h1>
+    <form method="post" , enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="test-name">Название теста:</label>
+            <input type="text" id="test-name" name="test-name" maxlength="50" required>
+            <div class="character-count"><span>0</span>/50</div>
+        </div>
 
-			<div class="form-group">
-				<label for="test-description">Описание теста
-					<textarea id="test-description" name="test-description" rows="5" maxlength="300" required></textarea>
-				<div class="character-count"><span>0</span>/300</div>
-			</div>
+        <div class="form-group">
+            <label for="test-description">Описание теста
+                <textarea id="test-description" name="test-description" rows="5" maxlength="300" required></textarea>
+                <div class="character-count"><span>0</span>/300</div>
+        </div>
 
-			<div class="form-group">
-				{% if flag %}
-				<div class="wrong-group">
-					<label for="wrong">Введите число!!!</label>
-				</div>
-				{% else %}
-				<label for="test-kol">Количество изображений:</label>
-				{% endif %}
-				<input type="text" id="test-kol" name="test-kol" maxlength="2" required>
-				<div class="character-count"><span>0</span>/2</div>
-			</div>
-			<div class="form-group">
-				<label for="test-type">Тип теста:</label>
-				<div class="toggle-buttons">
-					<input type="radio" id="test-type-1" name="test-type" value="public" checked>
-					<label for="test-type-1">Публичный</label>
-					<input type="radio" id="test-type-2" name="test-type" value="hidden">
-					<label for="test-type-2">Скрытый</label>
-				</div>
-			</div>
-			{% if file %}
-				<div class="wrong-group">
-					<label for="wrong">Введите только 1 изображение!!!</label>
-				</div>
-			{% else %}
-			<label for="test-type-1">Обложка теста</label>
-			{% endif %}
-            {{ form.csrf_token }}
-			{{ form.images }}
-			{{ form.submit }}
+        <div class="form-group">
+            {% if flag %}
+            <div class="wrong-group">
+                <label for="wrong">Введите число!!!</label>
+            </div>
+            {% else %}
+            <label for="test-kol">Количество изображений:</label>
+            {% endif %}
+            <input type="text" id="test-kol" name="test-kol" maxlength="2" required>
+            <div class="character-count"><span>0</span>/2</div>
+        </div>
+        <div class="form-group">
+            <label for="test-type">Тип теста:</label>
+            <div class="toggle-buttons">
+                <input type="radio" id="test-type-1" name="test-type" value="public" checked>
+                <label for="test-type-1">Публичный</label>
+                <input type="radio" id="test-type-2" name="test-type" value="hidden">
+                <label for="test-type-2">Скрытый</label>
+            </div>
+        </div>
+        {% if file %}
+        <div class="wrong-group">
+            <label for="wrong">Введите только 1 изображение!!!</label>
+        </div>
+        {% else %}
+        <label for="test-type-1">Обложка теста</label>
+        {% endif %}
+        {{ form.csrf_token }}
+        {{ form.images }}
+        {{ form.submit }}
 
-		</form>
-	</div>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
 		$(document).ready(function() {
 			// Count characters in test name and test description fields
 			$('#test-name, #test-description').on('input', function() {
@@ -334,7 +376,8 @@
 				var $characterCount = $(this).parent().find('.character-count span');
 				$characterCount.text(currentLength);
 			});
-	</script>
+
+</script>
 </body>
 </html>
 

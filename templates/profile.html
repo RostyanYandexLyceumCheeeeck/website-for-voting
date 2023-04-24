@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Профиль пользователя</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
         body {
             background-color: #3A424B;
@@ -10,11 +12,12 @@
         }
         .profile-container {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             align-items: center;
             justify-content: flex-end;
             justify-content: space-between;
             margin: 50px;
+            margin-top: 20px;
             padding: 20px;
             background-color: #263238;
             border-radius: 10px;
@@ -73,11 +76,146 @@
             text-align: center;
             margin-bottom: 5px;
         }
+        .nav {
+			background-color: #3A424B;
+			overflow: hidden;
+		}
+
+		.nav a {
+			float: right;
+			color: #FFCA28;
+			align: center;
+			text-align: center;
+			padding: 16px 16px;
+			text-decoration: none;
+            font-family: Verdana, Helvetica, Arial, sans-serif;
+		}
+		.nav a {
+		    margin-left: 30px;
+		}
+
+        .nav .pick a {
+            float: left;
+		    margin-left: 45%;
+		    padding: 0px 0px;
+		}
+		.nav .ak a:hover {
+			background-color: #FFCA28;
+			color: black;
+		}
+		.item {
+        background-color: #3A424B;
+        width: 300px;
+        height: 480px;
+        margin: 20px;
+        margin-top: 30px;
+        padding: 15px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        border-color: #FFCA28;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease-in-out;
+      }
+
+      .item:hover {
+        background-color: #263238;
+        transform: scale(1.05);
+        text-decoration: none;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .item-image {
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        border-color: #263238;
+        text-decoration: none;
+        width: 100%;
+        height: 200px;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .item-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+
+      .item-description {
+        font-size: 18px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+      }
+
+      .item-btn {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50%;
+        height: 40px;
+        background-color: #263238;
+        color: #FFCA28;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 40px;
+        border-top-right-radius: 10px;
+        transition: all 0.3s ease-in-out;
+
+      }
+
+      .item-btn:hover {
+        color: #263238;
+        background-color: #FFCA28;
+        text-decoration: none;
+      }
+
+      .item-details {
+        font-size: 16px;
+        margin-top: 10px;
+        position:relative;
+        bottom: -160px;
+      }
+
+      .item-details span {
+        font-weight: bold;
+      }
+      .qwe {
+        display: flex;
+        flex-direction: row;
+      }
+      .ewq{
+         margin-right: 30px;
+      }
     </style>
 </head>
 <body>
+    <div class="nav">
+    <div class="pick">
+    <a href="/">
+        <img src="/static/images/logo.svg" >
+    </a>
+    </div>
+</div>
     <div class="profile-container">
-        <div>
+        <div class="buttons">
+            <button class="button" onclick="window.location.href = 'http://127.0.0.1:5000/settings-profile'">настройки</button>
+            <button class="button">тесты</button>
+            <button class="button">избранное</button>
+            <button class="button" onclick="window.location.href = 'http://127.0.0.1:5000/logout'">выйти</button>
+            <button class="button">жалоба</button>
+            <button class="button">статистика</button>
+        </div>
+        <div class="qwe">
+        <div class="ewq">
             <div class="prof-text">Профиль пользователя</div>
             <div class="profile-photo">
                 <img src="/static/images/right.png" alt="Аватар пользователя" class="avatar">
@@ -91,14 +229,59 @@
               </p>
             </div>
         </div>
-        <div class="buttons">
-            <button class="button" onclick="window.location.href = 'http://127.0.0.1:5000/settings-profile'">настройки</button>
-            <button class="button">тесты</button>
-            <button class="button">избранное</button>
-            <button class="button" onclick="window.location.href = 'http://127.0.0.1:5000/logout'">выйти</button>
-            <button class="button">жалоба</button>
-            <button class="button">статистика</button>
+        {% for item in items %}
+        <div class="item" onclick="selectImage('{{ item.id }}')">
+            <div class="item-image">
+                <img src="{{ item.image }}" alt="{{ item.name }}">
+                <a href="#" class="item-btn">View Details</a>
+            </div>
+            <div class="item-title">{{ item.title }}</div>
+            <div class="item-description">{{ item.description }}</div>
+            <div class="item-details d-flex justify-content-around">
+                <div class="d-flex flex-row">
+                    qqwe
+                </div>
+                <div class="d-flex flex-row">
+                    qwe
+                </div>
+                <div class="d-flex flex-row">
+                    qwe
+                </div>
+            </div>
+        </div>
+        {% endfor %}
         </div>
     </div>
+    </div>
+
 </body>
+<script>
+    function selectImage(id_t) {
+    const endpointUrl = '/tests';
+    const requestData = {id: id_t};
+
+    fetch(endpointUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        if (response.redirected) {window.location.href = response.url}
+    })
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        alert("nigga");
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
+
+
+</script>
 </html>

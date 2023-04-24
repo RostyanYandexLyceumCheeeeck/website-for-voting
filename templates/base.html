@@ -4,26 +4,55 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
     <title>{{title}}</title>
+    <style>
+        .nav {
+
+			background-color: #3A424B;
+			overflow: hidden;
+		}
+
+		.nav a {
+			float: right;
+			color: #FFCA28;
+			text-align: center;
+			padding: 16px 16px;
+			text-decoration: none;
+            font-family: Verdana, Helvetica, Arial, sans-serif;
+		}
+		.nav a {
+		    margin-left: 30px;
+		}
+
+        .nav .pick a {
+            float: left;
+		    margin-left: 45%;
+		    padding: 0px 0px;
+		    margin-left:
+		}
+		.nav .ak a:hover {
+			background-color: #FFCA28;
+			color: black;
+		}
+
+    </style>
 </head>
 <header>
-    <nav class="navbar navbar-orange bg-light">
-        {% if current_user.is_authenticated %}
-        <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
-        {% else %}
-        <p>
-            <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
-            <a class="btn btn-success" href="/login">Войти</a>
-        </p>
-            {% endif %}
-    </nav>
+    <div class="nav">
+        <div class="pick">
+            <a href="/">
+                <img src="/static/images/logo.svg">
+            </a>
+        </div>
+    </div>
 </header>
 <!-- ------------------------------------- -->
 <body>
+
 <div class="split-container">
     <div class="left-side">
         <img src="/static/images/left11.png" alt="Left Image">
@@ -31,8 +60,8 @@
     </div>
     <div class="right-side">
         <main role="main" class="container">
-        {% block content %}{% endblock %}
-    </main>
+            {% block content %}{% endblock %}
+        </main>
     </div>
 </div>
 </body>
