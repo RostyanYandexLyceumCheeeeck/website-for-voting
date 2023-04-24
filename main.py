@@ -1,5 +1,4 @@
 import datetime
-import io
 import os
 import sqlite3
 import time
@@ -14,8 +13,6 @@ from flask_login import login_user, LoginManager, logout_user, login_required, c
 from flask_restful import Api
 from wtforms import MultipleFileField, SubmitField
 from flask_wtf import FlaskForm
-from PIL import Image
-from werkzeug.utils import secure_filename
 
 from data import db_session
 from data.__all_models import User, Test
@@ -42,33 +39,40 @@ class ImageForm(FlaskForm):
 
 @app.route('/', methods=['GET', 'POST'])
 def start_screan():
-    return render_template('start_scr.html')
+    flag = False
+    if current_user.is_authenticated:
+        flag = True
+
+    return render_template('start_scr.html', flag=flag)
 
 
 @app.route('/create', methods=['GET', 'POST'])
 def start_scre1an():
     form = ImageForm()
+    akk = False
+    if current_user.is_authenticated:
+        akk = True
+
     test_name = request.form.get('test-name')
     test_description = request.form.get('test-description')
     test_type = request.form.get('test-type')
     test_kol = request.form.get('test-kol')
     if test_kol is None:
-        return render_template('create.html', flag=False, form=form, file=False)
+        return render_template('create.html', flag=False, form=form, file=False, akk=akk)
     else:
         try:
             test_kol = int(test_kol)
         except Exception:
-            return render_template('create.html', flag=True, form=form, file=False)
-        print(form.images.data)
+            return render_template('create.html', flag=True, form=form, file=False, akk=akk)
         if len(form.images.data) != 1:
-            return render_template('create.html', flag=True, form=form, file=True)
+            return render_template('create.html', flag=True, form=form, file=True, akk=akk)
         filename = form.images.data[0].filename
         file = form.images.data[0]
         if filename.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp', '.jfif')):
             path = os.path.join('static/images', filename)
             file.save(path)
         else:
-            return render_template('create.html', flag=True, form=form, file=True)
+            return render_template('create.html', flag=True, form=form, file=True, akk=akk)
         data = {}
         data['test_name'] = test_name
         data['test_description'] = test_description
@@ -143,6 +147,7 @@ def add_text_question():
                 for answer in test['answers']:
                     answer.pop('id')
                     answers.append(answer)
+
                 test_to_db = {
                     'is_published': test['test_type'] != 'hidden',
                     'description': test['test_description'],
@@ -151,6 +156,7 @@ def add_text_question():
                     'user_id': session['user_id'],
                     'answers': answers
                 }
+
                 my_test = Test()
                 db_sess = db_session.create_session()
                 my_test.insert_test(db_sess, **test_to_db)
@@ -160,92 +166,27 @@ def add_text_question():
 
 @app.route('/tests', methods=['GET', 'POST'])
 def change_test():
+
     session['all'] = None
     session['choise'] = 0
-
-    items = [
-        {
-            "id": 1,
-            "title": "Item 1",
-            "image": "https://via.placeholder.com/300x300",
-            "description": "Description of Item 1",
-            "detail1": "qwe",
-            "detail2": "qwe",
-            "detail3": "qwe"
-        },
-        {
-            "id": 2,
-            "title": "Item 2",
-            "image": "https://via.placeholder.com/300x300",
-            "description": "Description of Item 2",
-            "detail1": "qwe",
-            "detail2": "qwe",
-            "detail3": "qwe"
-        },
-        {
-            "id": 3,
-            "title": "Item 3",
-            "image": "https://via.placeholder.com/300x300",
-            "description": "Description of Item 3",
-            "detail1": "qwe",
-            "detail2": "qwe",
-            "detail3": "qwe"
-        },
-        {
-            "id": 4,
-            "title": "Item 2",
-            "image": "/static/images/end.gif",
-            "description": "Description of Item 2",
-            "detail1": "qwe",
-            "detail2": "qwe",
-            "detail3": "qwe"
-        },
-        {
-            "id": 5,
-            "title": "Item 2",
-            "image": "/static/images/end.gif",
-            "description": "GHBdtn",
-            "detail1": "qwe",
-            "detail2": "qwe",
-            "detail3": "qwe"
-        }
-    ]
+    db_sess = db_session.create_session()
+    my_test = Test()
+    items = []
+    for i in range(1, 3):
+        items.append(my_test.get_test(db_sess, i))
     if request.method == 'POST':
         content = request.json
-        session['id'] = content['id']
+        session['id'] = my_test.get_test(db_sess, content['id'])
         return redirect('/test')
     return render_template('test_change.html', items=items)
 
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
-    zxc = {'answers': [{'file': {'created_date': '2023-04-06 12:29:34',
-                                 'path': '/static/images/end.gif', 'id': 3, 'answer_id': 3}, 'id': 3,
-                        'name': 'first_answer',
-                        'test_id': 3, 'description': 'pervii otvet'},
-                       {'file': {'created_date': '2023-04-06 12:29:34',
-                                 'path': '/static/images/end1.gif', 'id': 4, 'answer_id': 4}, 'id': 4,
-                        'name': 'second_answer',
-                        'test_id': 3, 'description': 'vtoroii otvet'}, {'file': {'created_date': '2023-04-06 12:29:34',
-                                                                                 'path': '/static/images/Снимок экрана (48).png',
-                                                                                 'id': 4, 'answer_id': 4}, 'id': 4,
-                                                                        'name': 'second_answer',
-                                                                        'test_id': 3, 'description': 'vtoroii otvet'},
-                       {'file': {'created_date': '2023-04-06 12:29:34',
-                                 'path': '/static/images/left.png', 'id': 3, 'answer_id': 3}, 'id': 3,
-                        'name': 'first_answer',
-                        'test_id': 3, 'description': 'pervii otvet'},
-                       {'file': {'created_date': '2023-04-06 12:29:34',
-                                 'path': '/static/images/right.png', 'id': 4, 'answer_id': 4}, 'id': 4,
-                        'name': 'second_answer',
-                        'test_id': 3, 'description': 'vtoroii otvet'}, {'file': {'created_date': '2023-04-06 12:29:34',
-                                                                                 'path': '/static/images/Снимок экрана (48).png',
-                                                                                 'id': 4, 'answer_id': 4}, 'id': 4,
-                                                                        'name': 'second_answer',
-                                                                        'test_id': 3, 'description': 'vtoroii otvet'}],
-           'info': {'id': 3, 'created_date': '2024-04-06 12:29:34', 'user_id': 1, 'is_published': False,
-                    'description': 'qweqweqwe', 'image': '/path', 'name': 'first_test', 'type': 'Image'}}
-    session['test_inf'] = zxc['info']
+    zxc = session['id']
+    session['test_inf'] = {'created_date': zxc['created_date'], 'description': zxc['description'], 'id': zxc['id'],
+                           'image': zxc['image'], 'is_published': zxc['is_published'], 'name': zxc['name'],
+                           'user_id': zxc['user_id']}
     if session.get('all', None) is not None:
         ls_in_suit = session['ls_in_suit']
         ls_all = session['all']
@@ -348,7 +289,13 @@ def register():
 @app.route('/profile', methods=['GET'])
 def profile():
     if current_user.is_authenticated:
-        return render_template('profile.html')
+        db_sess = db_session.create_session()
+        my_test = Test()
+        items = []
+        for i in range(1, 3):
+            items.append(my_test.get_test(db_sess, i))
+        return render_template('profile.html', items=items)
+
     return redirect("/login")
 
 
@@ -372,10 +319,6 @@ def logout():
 
 def main():
     db_session.global_init('db/DBase.sqlite')
-    db_sess = db_session.create_session()
-    query = select(User).where(User.id == 6).options(selectinload(User.tests))
-    test = db_sess.scalar(query)
-    print(test.to_dict())
     app.run(host='0.0.0.0', port=5000, debug=True)
 
 
