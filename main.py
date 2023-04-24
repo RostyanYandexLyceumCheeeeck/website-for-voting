@@ -1,8 +1,12 @@
 import datetime
+import io
 import os
 import sqlite3
 import time
 import random
+
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from flask import Flask, render_template, redirect, make_response, jsonify, request, session, url_for
 from dotenv import load_dotenv
@@ -10,6 +14,8 @@ from flask_login import login_user, LoginManager, logout_user, login_required, c
 from flask_restful import Api
 from wtforms import MultipleFileField, SubmitField
 from flask_wtf import FlaskForm
+from PIL import Image
+from werkzeug.utils import secure_filename
 
 from data import db_session
 from data.__all_models import User, Test
@@ -53,6 +59,7 @@ def start_scre1an():
             test_kol = int(test_kol)
         except Exception:
             return render_template('create.html', flag=True, form=form, file=False)
+        print(form.images.data)
         if len(form.images.data) != 1:
             return render_template('create.html', flag=True, form=form, file=True)
         filename = form.images.data[0].filename
@@ -132,8 +139,6 @@ def add_text_question():
                 return render_template('add_text_question.html', img=name_img, ln=len(name_img), mas=need_id)
             else:
                 test = session.get('test', None)
-
-                return redirect('/')
                 answers = []
                 for answer in test['answers']:
                     answer.pop('id')
@@ -157,6 +162,7 @@ def add_text_question():
 def change_test():
     session['all'] = None
     session['choise'] = 0
+
     items = [
         {
             "id": 1,
@@ -298,6 +304,8 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect('/profile')
     form = LoginForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
@@ -344,9 +352,11 @@ def profile():
     return redirect("/login")
 
 
-@app.route('/settings-profile', methods=['GET'])
+@app.route('/settings-profile', methods=['GET', 'POST'])
 def settings_profile():
     if current_user.is_authenticated:
+        if request.method == 'POST':
+            profile_photo = request.files['pro']
         return render_template('settings-profile.html')
     return redirect("/login")
 
@@ -362,6 +372,10 @@ def logout():
 
 def main():
     db_session.global_init('db/DBase.sqlite')
+    db_sess = db_session.create_session()
+    query = select(User).where(User.id == 6).options(selectinload(User.tests))
+    test = db_sess.scalar(query)
+    print(test.to_dict())
     app.run(host='0.0.0.0', port=5000, debug=True)
 
 
