@@ -20,6 +20,9 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     email: Mapped[str] = Column(String, nullable=False, unique=True)
     hashed_password = Column(String, nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.now)
+    #  image = ...
+    #  description = ...
+
     tests = relationship(Test)
 
     def set_password(self, password):

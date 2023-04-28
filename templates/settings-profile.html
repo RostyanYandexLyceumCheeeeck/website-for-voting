@@ -3,66 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>Страница настроек</title>
+     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
     <style>
-    body {
-      background-color: #3a454b;
-    }
+        body {
+            background-color: #3A424B;
+            color: #FFCA28;
+            font-family: Arial, sans-serif;
+        }
     .container {
       display: flex;
-      margin: 50px;
       text-align: center;
+      margin: 50px;
+      margin-top: 10px;
+      padding: 10px;
     }
     .left-section {
       flex: 1;
-      padding: 50px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      max-width: 20%;
+      max-width: 25%;
 
     }
     .avatar {
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            margin: auto;
-            margin-bottom: 30px;
-            margin-top: 25px;
-            background-color: #4CAF50;
-        }
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      margin: auto;
+      margin-bottom: 30px;
+      margin-top: 25px;
+      background-color: #4CAF50;
+    }
     .btn-group {
       display: flex;
       justify-content: space-between;
       flex-direction: column;
       width: 75%;
       margin: auto;
+      margin-bottom: 0px;
     }
-    .btn {
-      background-color: #4CAF50;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-      border-radius: 5px;
-      margin-bottom: 15px;
 
-    }
-    .password-btn {
-      margin-top: 20px;
-    }
     .right-section {
       flex: 2;
-      padding: 50px;
+      padding: 4%;
       background-color: #263238;
       color: #fff;
-      margin-top: 50px;
-      max-width: 80%;
+      max-width: 75%;
       text-align: center;
+
+      border: 1px solid #CCC;
+      border-radius: 5px;
+      font-size: 32px;
+      color: #FFCA28;
+      border-color: #FFCA28;
     }
     .input-group {
       display: flex;
@@ -74,23 +67,9 @@
       margin-right: 5px;
 
     }
-    .input-group input {
-      height: 35px;
-      resize: none;
-      vertical-align: top;
-      flex: 1;
-      padding: 5px;
-      border-radius: 5px;
-      border: none;
-    }
-    .form-btn-group {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
     .profile-photo {
-      width: 300px;
-      height: 470px;
+      width: 80%;
+      height: 60%;
       border-radius: 25px;
       text-align: center;
       background-image: url("/static/images/left.png");
@@ -98,20 +77,14 @@
       background-position: center center;
       color: #df396a;
     }
-    .text {
-      font-size: 18px;
+    text {
+      font-size: 36px;
       font-weight: bold;
-    }
-    .deck input{
-    vertical-align: top;
-      height: 200px;
-      resize: none;
     }
 
     input::file-selector-button {
 		 background-color: #4CAF50;
       border: none;
-      color: white;
       padding: 10px 20px;
       text-align: center;
       text-decoration: none;
@@ -121,51 +94,154 @@
       cursor: pointer;
       border-radius: 5px;
       margin-bottom: 15px;
+
+
 		}
+	.submit {
+	  margin-top: 25px;
+	  }
+    .bio {
+    width: 80%;
+    height: 40%;
+    }
+	.bio textarea {
+	  height: 96.5%;
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 0px;
+      padding: 10px;
+      border: 1px solid #CCC;
+      border-radius: 5px;
+      font-size: 16px;
+      color: #FFCA28;
+      resize: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease-in-out;
+      border-color: #FFCA28;
+      background-color: #263238;
+	}
+    .nav {
+      background-color: #3A424B;
+      overflow: hidden;
+    }
 
+    .nav a {
+      float: right;
+      color: #FFCA28;
+      align: center;
+      text-align: center;
+      padding: 16px 16px;
+      text-decoration: none;
+      font-family: Verdana, Helvetica, Arial, sans-serif;
+    }
+    .nav a {
+      margin-left: 75px;
+    }
 
-
+    .nav .pick a {
+      float: left;
+      margin-left: 45   %;
+      padding: 0px 0px;
+    }
+    .nav .ak a:hover {
+      background-color: #FFCA28;
+      color: black;
+    }
+    .counter {
+      word-wrap: break-word;
+      }
     </style>
 </head>
 <body>
+<div class="nav">
+    <div class="pick">
+    <a href="/">
+        <img src="/static/images/logo.svg" >
+    </a>
+    </div>
+</div>
     <form method="post" enctype="multipart/form-data">
     <div class="container">
         <div class="left-section">
             <div class="profile-photo">
-                <img src="/static/images/right.png" alt="Аватар пользователя" class="avatar">
+                <img src="{{ form.path_avatar }}" alt="Аватар пользователя" class="avatar">
                 <div class="btn-group">
                     <div class="text"> фото профиля</div>
-                    <button class="btn" onclick="document.getElementById('pro-photo').click()">Загрузить</button>
-                    <input type='file' id="pro-photo" name="pro" accept="image/png, image/gif, image/jpeg" style="display:none">
-                    <div class="text"> фон фото профиля</div>
-                    <button class="btn"  onclick="document.getElementById('carpet-avatar').click()" >Загрузить фон аватара</button>
-                    <input type='file' id="carpet-avatar" name="carpet" style="display:none">
+                    {{ form.download_img }}
                 </div>
             </div>
-            <button class="btn password-btn">Изменить пароль</button>
+            <div class="bio">
+                {{ form.bio(maxlength=360, placeholder="О себе") }}
+            </div>
         </div>
         <div class="right-section">
-            <form>
-                <div class="input-group">
-                    <label for="login1">Логин:</label>
-                    <input type="text" id="login1">
-                </div>
-                <div class="input-group">
-                    <label for="login2">E-mail:</label>
-                    <input type="text" id="login2">
-                </div>
-                <div class="input-group deck">
-                    <label for="login3">О себе:</label>
-                    <input type="text" id="login3">
-                </div>
-                <div class="form-btn-group">
-                    <button class="btn">Сохранить изменения</button>
-                    <button class="btn">Сбросить</button>
-                </div>
-            </form>
+            <div class="input labeled">
+                <div class="text">Настройки</div>
+                {{ form.name(class="form-control user-icon", placeholder="Логин") }}<br>
+                {% for error in form.name.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+                {% endfor %}
+            </div>
+            <div class="input labeled">
+                {{ form.email(class="form-control email-icon", type="email", placeholder="email почта") }}<br>
+                {% for error in form.email.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+            <div class="input labeled">
+                {{ form.password_last(class="form-control password-icon", type="password", placeholder="Старый пароль") }}<br>
+                {% for error in form.password_last.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+            <div class="input labeled">
+                {{ form.password(class="form-control password-icon", type="password", placeholder="Новый пароль") }}<br>
+                {% for error in form.password.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+            <div class="input labeled">
+                {{ form.password_again(class="form-control password-icon", type="password", placeholder="Повторите новый пароль") }}<br>
+                {% for error in form.password_again.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+            <div class="submit">{{ form.submit_save(type="submit", class="form-control begin-reg-ath") }} {{ form.submit_reset(type="submit", class=" form-control begin-reg-ath") }}</div>
+            <div class="text"> {{ form.message }}</div>
         </div>
     </div>
 
     </form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+		$(document).ready(function() {
+			// Count characters in test name and test description fields
+			$('#bio, #test-description').on('input', function() {
+				var maxLength = $(this).attr('maxlength');
+				var currentLength = $(this).val().length;
+				var $characterCount = $(this).parent().find('.character-count span');
+				$characterCount.text(currentLength);
+			});
+
+		$('#bio').on("input", function() {
+          var maxlength = $(this).attr("maxlength");
+          var currentLength = $(this).val().length;
+          var $characterCount = $(this).parent().find('.character-count span');
+
+          $characterCount.text(currentLength);
+        });
+
+</script>
 </body>
 </html>

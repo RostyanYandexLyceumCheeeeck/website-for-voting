@@ -50,14 +50,5 @@ background-image: url("/static/images/password.png");
 }
 
 .begin-reg-ath {
-  height: 60px;
-  width: 450px;
   padding-left: 60px;
-  margin-bottom: 15px;
-  margin-top:20px;
-  font-size: 18px;
-      font-weight: bold;
-  background-repeat: no-repeat;
-  background-color: #263238;
-  color: #FFCA28;
 }

@@ -14,11 +14,14 @@ from flask_restful import Api
 from wtforms import MultipleFileField, SubmitField
 from flask_wtf import FlaskForm
 
+import forms.registerForm
 from data import db_session
 from data.__all_models import User, Test
 from forms.registerForm import RegisterForm
 from forms.loginForm import LoginForm
+from forms.settingsForm import SettingsForm
 from resources import user_resource
+
 
 load_dotenv()
 
@@ -39,9 +42,7 @@ class ImageForm(FlaskForm):
 
 @app.route('/', methods=['GET', 'POST'])
 def start_screan():
-    flag = False
-    if current_user.is_authenticated:
-        flag = True
+    flag = current_user.is_authenticated
 
     return render_template('start_scr.html', flag=flag)
 
@@ -253,7 +254,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         time.sleep(random.random())
         if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
+            login_user(user)
             session['user_id'] = user.id
             return redirect("/profile")
         return render_template('login.html',
@@ -294,6 +295,7 @@ def profile():
         items = []
         for i in range(1, 3):
             items.append(my_test.get_test(db_sess, i))
+        db_sess.close()
         return render_template('profile.html', items=items)
 
     return redirect("/login")
@@ -302,9 +304,38 @@ def profile():
 @app.route('/settings-profile', methods=['GET', 'POST'])
 def settings_profile():
     if current_user.is_authenticated:
+        form = SettingsForm()
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == session['user_id']).first()
+        print(user.to_dict())
         if request.method == 'POST':
-            profile_photo = request.files['pro']
-        return render_template('settings-profile.html')
+            if form.validate_on_submit():
+                print('VALIDATE!')
+            print(request.files.to_dict())
+            if form.submit_save.data:
+                print("YEP111!!!!")
+                if form.bio.data:
+                    print(form.bio.data)
+                    # user.description = form.bio.data
+                if form.name.data:
+                    print(form.name.data)
+                    user.name = form.name.data
+                if form.email.data:
+                    user.email = form.email.data
+
+                if user.check_password(form.password_last.data):
+                    print('zxczxczczxc', form.password_last.data)
+                    if form.password.data != form.password_again.data:
+                        form.message = "Новые пароли не совпадают"
+                        return render_template('settings-profile.html', form=form)
+                    if form.password.data:
+                        user.set_password(form.password.data)
+                if request.files['download_img']:
+                    # user.image =
+                    print(request.files['download_img'].filename)
+        elif request.method == 'GET':
+            form.set_form(user=user)
+        return render_template('settings-profile.html', form=form)
     return redirect("/login")
 
 
