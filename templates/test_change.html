@@ -21,7 +21,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        margin-top: 50px;
+        margin-top: 20px;
       }
 
       .item {
@@ -102,33 +102,69 @@
         font-weight: bold;
       }
       .nav {
+		background-color: #263238;
+		overflow: hidden;
+	  }
 
-			background-color: #263238;
-			overflow: hidden;
-		}
-
-		.nav a {
-			float: right;
-			color: #FFCA28;
-			text-align: center;
-			padding: 16px 16px;
-			text-decoration: none;
-            font-family: Verdana, Helvetica, Arial, sans-serif;
-		}
-		.nav a {
-		    margin-left: 1400px;
-		}
-
-        .nav .pick a {
-            float: left;
-		    margin-left:0px;
-		    padding: 0px 0px;
-		}
-		.nav .ak a:hover {
-			background-color: #FFCA28;
-			color: black;
+	  .nav a {
+        float: right;
+        color: #FFCA28;
+        text-align: center;
+        padding: 16px 16px;
+        text-decoration: none;
+        font-family: Verdana, Helvetica, Arial, sans-serif;
+	  }
+      .nav a {
+        margin-left: 1400px;
 		}
 
+      .nav .pick a {
+        float: left;
+        margin-left:0px;
+        padding: 0px 0px;
+	  }
+	  .nav .ak a:hover {
+        background-color: #FFCA28;
+        color: black;
+	  }
+      .filters {
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+      }
+      .form-select {
+        width: 8%;
+        height: 35px;
+        background-color: #FFCA28;
+        margin-left: 1%;
+        margin-right: 1%;
+        text-align: center;
+        color: #263238;
+        font-weight: bold;
+        border-radius: 10px;
+        transition: background-color 0.2s ease-in-out;
+
+        }
+      .form-select:hover{
+	    background-color: #263238;
+        color: #FFCA28;
+        border: 1px solid #FFCA28;
+	  }
+      .label {
+        width: 12%;
+      }
+      .sub {
+        width: 12%;
+        padding: 4.5px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+      }
+      .rung {
+      width: 5.7%;
+      }
 
     </style>
 </head>
@@ -140,30 +176,45 @@
     </a>
     </div>
 </div>
-<h1>My Items</h1>
-<div class="container">
-    {% for item in items %}
-    <div class="item" onclick="selectImage('{{ item.id }}')">
-        <div class="item-image">
-            <img src="{{ item.image }}" alt="{{ item.name }}">
-            <a href="#" class="item-btn">View Details</a>
-        </div>
-        <div class="item-title">{{ item.title }}</div>
-        <div class="item-description">{{ item.description }}</div>
-        <div class="item-details d-flex justify-content-around">
-            <div class="d-flex flex-row">
-                qqwe
-            </div>
-            <div class="d-flex flex-row">
-                qwe
-            </div>
-            <div class="d-flex flex-row">
-                qwe
-            </div>
-        </div>
-    </div>
-    {% endfor %}
+<h1>Тесты</h1>
+<form method="post" enctype="multipart/form-data">
+<div class="filters">
+    <h2>Фильтры :</h2>
+    {{ form.private(class="form-select", id="Private") }}
+    {{ form.whose(class="form-select", id="Who")  }}
+    {{ form.name(class="label form-select", type="text", placeholder="Название теста", maxlength="60") }}
+    {{ form.ranking(class="form-select rung", id="rung") }}
+    {{ form.submit_filter(class="form-select sub") }}
 </div>
+
+
+    <div>
+        {{ form.csrf_token }}
+    </div>
+    <div class="container">
+        {% for item in form.tests %}
+        <div class="item" onclick="selectImage('{{ item.id }}')">
+            <div class="item-image">
+                <img src="{{ item.image }}" alt="{{ item.name }}">
+                <a href="#" class="item-btn">View Details</a>
+            </div>
+            <div class="item-title">{{ item.title }}</div>
+            <div class="item-description">{{ item.description }}</div>
+            <div class="item-details d-flex justify-content-around">
+                <div class="d-flex flex-row">
+                    {{ item.score }}
+                </div>
+                <div class="d-flex flex-row">
+                    {{ item.count_finished }}
+                </div>
+                <div class="d-flex flex-row">
+                    {{ item.name }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</form>
 <script>
     function selectImage(id_t) {
     const endpointUrl = '/tests';
@@ -190,8 +241,22 @@
         console.error('There was a problem with the fetch operation:', error);
     });
 }
-
-
 </script>
+<script>
+    const privateSelect = document.getElementById("Private");
+    const whoSelect = document.getElementById("Who");
+
+    privateSelect.addEventListener("change", function() {
+        if(privateSelect.value === "2") {
+            whoSelect.value = "1";
+            whoSelect.disabled = true;
+        }
+        else {
+            whoSelect.disabled = false;
+        }
+    })  ;
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </body>
 </html>

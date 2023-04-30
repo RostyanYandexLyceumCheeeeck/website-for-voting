@@ -16,13 +16,12 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'Users'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = Column(String, nullable=True)
-    email: Mapped[str] = Column(String, nullable=False, unique=True)
+    name: Mapped[str] = Column(String(32), nullable=True)
+    email: Mapped[str] = Column(String(64), nullable=False, unique=True)
     hashed_password = Column(String, nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.now)
-    #  image = ...
-    #  description = ...
-
+    image = Column(String, default='/static/images/right.png')
+    description = Column(String(360), default='zdes poka nichego net :(')
     tests = relationship(Test)
 
     def set_password(self, password):

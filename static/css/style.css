@@ -51,4 +51,10 @@ background-image: url("/static/images/password.png");
 
 .begin-reg-ath {
   padding-left: 60px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.begin-reg-ath:hover {
+  background-color: #FFCA28;
+  color: #253137;
 }
